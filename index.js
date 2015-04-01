@@ -15,9 +15,13 @@ module.exports = function (opts, minimistOpts) {
 		argv: process.argv.slice(2)
 	}, opts);
 
+	if (typeof minimistOpts !== 'undefined' && typeof minimistOpts === 'function') {
+		var existingMinimist = minimistOpts;
+	}
+
 	var pkg = typeof opts.pkg === 'string' ? require(path.join(parentDir, opts.pkg)) : opts.pkg;
-	var argv = minimist(opts.argv, minimistOpts);
-	var help = '\n' + indentString(pkg.description + (opts.help ? '\n\n' + opts.help : '\n'), '  ');
+	var argv = existingMinimist || minimist(opts.argv, minimistOpts);
+	var help = '\n' + indentString(pkg.description + (opts.help ? '\n\n' + opts.help : '\n'), '	');
 	var showHelp = function () {
 		console.log(help);
 		process.exit();
